@@ -75,7 +75,7 @@ Any always-on Node host (a VPS, or Railway with a volume) works. The server also
 
 1. Set environment variables (see `server/.env.example`):
    - `NODE_ENV=production`
-   - `JWT_SECRET`: a long random string (required)
+   - `JWT_SECRET`: optional; if unset the server makes one on first boot and stores it in the database
    - `SITE_URL`: the real address, e.g. `https://frogrillsxperience.com` (used by Google and Paystack)
    - `DB_PATH` and `UPLOAD_DIR`: point both at the persistent disk, e.g. `/var/data/fro-grills-xperience.db` and `/var/data/uploads`
    - `TRUST_PROXY=1` behind one proxy (Railway, Nginx), or `2` when requests also pass through Vercel's forwarding

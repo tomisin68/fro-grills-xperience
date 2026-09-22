@@ -9,8 +9,8 @@ services:
     plan: starter
     region: frankfurt
     buildCommand: npm ci --include=dev && npm run build
-    # seed only fills an empty database (owner account + starter menu); it never touches existing data.
-    startCommand: npm run seed && npm start
+    # On an empty database the server creates the owner account and starter menu itself.
+    startCommand: npm start
     healthCheckPath: /api/health
     disk:
       name: data

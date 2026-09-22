@@ -16,6 +16,7 @@ export const config = {
   dbPath: env.DB_PATH || path.join(SERVER_ROOT, 'data', 'fro-grills-xperience.db'),
   uploadDir: env.UPLOAD_DIR || path.join(SERVER_ROOT, 'uploads'),
   clientDist: env.CLIENT_DIST || path.resolve(SERVER_ROOT, '..', 'client', 'dist'),
+  // Optional: when unset, the server generates one on first boot and stores it (see lib/secret.js).
   jwtSecret: env.JWT_SECRET || (isProd ? '' : 'dev-only-secret-do-not-use-in-production'),
   // Public URL of the site. Used for canonical links, the sitemap and payment callbacks.
   siteUrl: (env.SITE_URL || (isProd ? `http://localhost:${port}` : 'http://localhost:5173')).replace(/\/$/, ''),
@@ -23,7 +24,3 @@ export const config = {
   trustProxy: env.TRUST_PROXY ? Number(env.TRUST_PROXY) || env.TRUST_PROXY : false,
   sessionHours: 12,
 };
-
-if (!config.jwtSecret) {
-  throw new Error('JWT_SECRET must be set when NODE_ENV=production');
-}

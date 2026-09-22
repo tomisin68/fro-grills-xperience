@@ -324,6 +324,17 @@ test('only the owner changes settings, and bad values are rejected', async () =>
   assert.equal(ok.data.settings.restaurant.name, 'Fro Grills Xperience');
 });
 
+test('internal rows in the settings table never reach the API', async () => {
+  const owner = await staff('owner');
+  db.run("INSERT INTO settings (key, value) VALUES ('@session_secret', ?)", [JSON.stringify('top-secret-value')]);
+  const admin = await owner('GET', '/api/admin/settings');
+  assert.equal(admin.status, 200);
+  assert.deepEqual(Object.keys(admin.data.settings).sort(), ['hours', 'locale', 'ordering', 'payments', 'restaurant', 'seo']);
+  assert.ok(!JSON.stringify(admin.data).includes('top-secret-value'));
+  const publicSettings = await guest('GET', '/api/public/settings');
+  assert.ok(!JSON.stringify(publicSettings.data).includes('top-secret-value'));
+});
+
 test('search engines get a sitemap and robots rules', async () => {
   const sitemap = await guest('GET', '/sitemap.xml');
   assert.match(sitemap.data, /\/menu\/beef-suya/);

@@ -68,8 +68,12 @@ let cache = null;
 
 export function getSettings() {
   if (cache) return cache;
+  // The settings table also holds internal rows (the session secret); only real sections are read.
   const stored = Object.fromEntries(
-    db.all('SELECT key, value FROM settings').map((r) => [r.key, JSON.parse(r.value)]),
+    db
+      .all('SELECT key, value FROM settings')
+      .filter((r) => r.key in DEFAULT_SETTINGS)
+      .map((r) => [r.key, JSON.parse(r.value)]),
   );
   cache = merge(DEFAULT_SETTINGS, stored);
   return cache;

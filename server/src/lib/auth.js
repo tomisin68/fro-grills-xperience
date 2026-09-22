@@ -3,6 +3,7 @@ import { config } from '../config.js';
 import { db } from '../db/index.js';
 import { forbidden, unauthorized } from './errors.js';
 import { can, permissionsFor } from './permissions.js';
+import { sessionSecret } from './secret.js';
 
 export const SESSION_COOKIE = 'fgx_session';
 
@@ -17,7 +18,7 @@ export function publicUser(user) {
 }
 
 export function setSessionCookie(res, user) {
-  const token = jwt.sign({ sub: user.id, tv: user.token_version }, config.jwtSecret, {
+  const token = jwt.sign({ sub: user.id, tv: user.token_version }, sessionSecret(), {
     expiresIn: `${config.sessionHours}h`,
   });
   res.cookie(SESSION_COOKIE, token, {
@@ -38,7 +39,7 @@ export function sessionUser(req) {
   const token = req.cookies?.[SESSION_COOKIE];
   if (!token) return null;
   try {
-    const payload = jwt.verify(token, config.jwtSecret);
+    const payload = jwt.verify(token, sessionSecret());
     const user = db.get('SELECT * FROM users WHERE id = ?', [payload.sub]);
     if (!user || !user.active || user.token_version !== payload.tv) return null;
     return user;
