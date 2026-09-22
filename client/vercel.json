@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://fro-grills-xperience-api.onrender.com/api/:path*" },
+    { "source": "/uploads/:path*", "destination": "https://fro-grills-xperience-api.onrender.com/uploads/:path*" },
+    { "source": "/sitemap.xml", "destination": "https://fro-grills-xperience-api.onrender.com/sitemap.xml" },
+    { "source": "/robots.txt", "destination": "https://fro-grills-xperience-api.onrender.com/robots.txt" },
+    { "source": "/((?!api/|uploads/).*)", "destination": "/index.html" }
+  ]
+}

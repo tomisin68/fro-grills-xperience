@@ -1,0 +1,45 @@
+# Render Blueprint for the Fro Grills Xperience server (API + database).
+# Render dashboard → New → Blueprint → pick this repository → fill in the values it asks for.
+# The Vercel website forwards /api, /uploads, /sitemap.xml and /robots.txt here (see client/vercel.json).
+services:
+  - type: web
+    name: fro-grills-xperience-api
+    runtime: node
+    # A persistent disk needs a paid instance; on the free plan the database is wiped on every restart.
+    plan: starter
+    region: frankfurt
+    buildCommand: npm ci --include=dev && npm run build
+    # seed only fills an empty database (owner account + starter menu); it never touches existing data.
+    startCommand: npm run seed && npm start
+    healthCheckPath: /api/health
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "24"
+      - key: JWT_SECRET
+        generateValue: true
+      # The address customers use. Used for Google links and Paystack's return page.
+      - key: SITE_URL
+        value: https://client-two-lime-12.vercel.app
+      # Requests arrive through Vercel and then Render's proxy, so trust two hops to see the customer's real IP.
+      - key: TRUST_PROXY
+        value: "2"
+      - key: DB_PATH
+        value: /var/data/fro-grills-xperience.db
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: OWNER_NAME
+        value: Fro Grills Xperience Owner
+      - key: OWNER_EMAIL
+        value: owner@frogrillsxperience.com
+      # Password for the first owner sign-in. Leave blank to have a random one printed in the deploy logs.
+      - key: OWNER_PASSWORD
+        sync: false
+      # Optional: Paystack secret key (sk_live_... or sk_test_...) to switch on online payment.
+      - key: PAYSTACK_SECRET_KEY
+        sync: false

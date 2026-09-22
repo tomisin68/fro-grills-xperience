@@ -51,18 +51,38 @@ Other commands: `npm test` (API tests), `npm run build` (build the website), `np
 
 ## Going live
 
-The server is a normal, always-on Node process that also serves the built website. **Vercel and other serverless hosts are not suitable**: the database is a file and the live order updates use a long-lived connection. Use a VPS, or Render or Railway with a persistent disk.
+The site has two parts, and **both must be online**:
+
+- **Website** on Vercel (the `client` folder). `client/vercel.json` forwards every `/api`, `/uploads`, `/sitemap.xml` and `/robots.txt` request to the server, so customers and staff only ever see the Vercel address.
+- **Server** on Render (`render.yaml`). It holds the database, so it needs an always-on host with a persistent disk. Vercel can't run it.
+
+If the website shows "not loading", the server is down or not deployed yet.
+
+### Deploy the server on Render (once)
+
+1. In Render: **New → Blueprint**, connect GitHub, and pick this repository. Render reads `render.yaml`.
+2. When asked, enter `OWNER_PASSWORD` (the owner's first sign-in password). Add `PAYSTACK_SECRET_KEY` now or later.
+3. Click **Apply**. The service must be named `fro-grills-xperience-api`, because `client/vercel.json` points at `https://fro-grills-xperience-api.onrender.com`. If Render gives it a different address, update the four URLs in `client/vercel.json`.
+4. The first start creates the owner account and starter menu. Sign in at `<website>/admin`, then replace the menu, photos, address, phone and bank details.
+
+The Starter plan (about $7/month plus $0.25 per GB of disk) is needed for the disk. On the free plan, the database is wiped whenever the server restarts.
+
+If `SITE_URL` changes (for example to a custom domain), update it in Render's environment settings.
+
+### Running the server anywhere else
+
+Any always-on Node host (a VPS, or Railway with a volume) works. The server also serves the built website itself, so a single host is enough.
 
 1. Set environment variables (see `server/.env.example`):
    - `NODE_ENV=production`
    - `JWT_SECRET`: a long random string (required)
    - `SITE_URL`: the real address, e.g. `https://frogrillsxperience.com` (used by Google and Paystack)
    - `DB_PATH` and `UPLOAD_DIR`: point both at the persistent disk, e.g. `/var/data/fro-grills-xperience.db` and `/var/data/uploads`
-   - `TRUST_PROXY=1` when behind Render, Railway or Nginx
+   - `TRUST_PROXY=1` behind one proxy (Railway, Nginx), or `2` when requests also pass through Vercel's forwarding
    - `PAYSTACK_SECRET_KEY` to switch on online payment
 2. Build with `npm install && npm run build`, and start with `npm start`.
 3. Run `OWNER_EMAIL=... OWNER_PASSWORD=... npm run seed` once to create the owner account and starter menu. Then replace the menu, photos, address, phone and bank details from the back office.
-4. In the Paystack dashboard, set the webhook URL to `https://<your-domain>/api/public/payments/paystack/webhook`.
+4. In the Paystack dashboard, set the webhook URL to `https://<website address>/api/public/payments/paystack/webhook`.
 5. Schedule `npm run backup` daily and copy `data/backups/` somewhere off the server.
 
 ### Getting found on Google

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "Fro Grills Xperience: online ordering, POS and back office",
+  "engines": {
+    "node": ">=22.13"
+  },
   "workspaces": [
     "server",
     "client"

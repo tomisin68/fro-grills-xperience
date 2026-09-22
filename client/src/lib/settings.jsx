@@ -46,7 +46,8 @@ export function SettingsProvider({ children }) {
         {error ? (
           <div className="px-6 text-center">
             <p className="font-display text-xl font-bold text-white">{BRAND_NAME} is not loading right now</p>
-            <p className="mt-2 text-sm">{error.message}</p>
+            <p className="mt-2 text-sm">Our ordering system could not be reached. Please try again in a moment.</p>
+            <p className="mt-1 text-xs text-stone-500">{error.message}</p>
             <button onClick={reload} className="mt-5 rounded-full bg-ember-500 px-5 py-2.5 text-sm font-semibold text-white">
               Try again
             </button>
