@@ -1,0 +1,102 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-ember-50: #fff5ed;
+  --color-ember-100: #ffe7d4;
+  --color-ember-200: #ffcaa8;
+  --color-ember-300: #ffa470;
+  --color-ember-400: #ff7a3d;
+  --color-ember-500: #f95d16;
+  --color-ember-600: #e0450c;
+  --color-ember-700: #b9330c;
+  --color-ember-800: #932b12;
+  --color-ember-900: #772612;
+
+  --color-coal-700: #3a322d;
+  --color-coal-800: #27211d;
+  --color-coal-900: #1b1714;
+  --color-coal-950: #14110f;
+
+  --color-cream: #faf6f0;
+
+  --animate-slide-in: slide-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-fade-in: fade-in 160ms ease-out;
+  --animate-pop: pop 260ms cubic-bezier(0.2, 0.8, 0.2, 1.2);
+
+  @keyframes slide-in {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pop {
+    0% { transform: scale(0.96); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-cream font-sans text-coal-900 antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ember-500;
+  }
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+}
+
+/* Server-rendered copy that search engines read; React replaces it on load. */
+.prerender {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem;
+  line-height: 1.6;
+  h1 { font-family: var(--font-display); font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; }
+  h2 { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; margin: 1.75rem 0 0.5rem; }
+  li { margin: 0.35rem 0; }
+  a { color: var(--color-ember-700); text-decoration: underline; }
+}
+
+/* Soft glow used behind the hero and dark bands. */
+.ember-glow {
+  background:
+    radial-gradient(60rem 30rem at 85% -10%, rgb(249 93 22 / 0.35), transparent 60%),
+    radial-gradient(40rem 26rem at -10% 110%, rgb(185 51 12 / 0.35), transparent 60%),
+    var(--color-coal-950);
+}
+
+.grain {
+  background-image: radial-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}

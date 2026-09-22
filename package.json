@@ -1,0 +1,22 @@
+{
+  "name": "fro-grills-xperience",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fro Grills Xperience: online ordering, POS and back office",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client",
+    "start": "npm start -w server",
+    "seed": "npm run seed -w server --",
+    "seed:demo": "npm run seed:demo -w server --",
+    "backup": "npm run backup -w server",
+    "test": "npm test -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
