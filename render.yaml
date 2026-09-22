@@ -3,7 +3,7 @@
 # The Vercel website forwards /api, /uploads, /sitemap.xml and /robots.txt here (see client/vercel.json).
 services:
   - type: web
-    name: fro-grills-xperience-api
+    name: fro-grills-xperience
     runtime: node
     # A persistent disk needs a paid instance; on the free plan the database is wiped on every restart.
     plan: starter

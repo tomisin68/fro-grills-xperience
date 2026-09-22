@@ -62,7 +62,8 @@ If the website shows "not loading", the server is down or not deployed yet.
 
 1. In Render: **New → Blueprint**, connect GitHub, and pick this repository. Render reads `render.yaml`.
 2. When asked, enter `OWNER_PASSWORD` (the owner's first sign-in password). Add `PAYSTACK_SECRET_KEY` now or later.
-3. Click **Apply**. The service must be named `fro-grills-xperience-api`, because `client/vercel.json` points at `https://fro-grills-xperience-api.onrender.com`. If Render gives it a different address, update the four URLs in `client/vercel.json`.
+3. Click **Apply**. `client/vercel.json` points at `https://fro-grills-xperience.onrender.com`, so if Render gives the service a different address, update the four URLs in that file.
+   Also set `SITE_URL` in Render to the address customers use, or Google links and Paystack returns will point at localhost.
 4. The first start creates the owner account and starter menu. Sign in at `<website>/admin`, then replace the menu, photos, address, phone and bank details.
 
 The Starter plan (about $7/month plus $0.25 per GB of disk) is needed for the disk. On the free plan, the database is wiped whenever the server restarts.
